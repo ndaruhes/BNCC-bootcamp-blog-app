@@ -15,7 +15,7 @@ class Blog extends Model
     // Field yang gk boleh diisi
     // protected $guarded = ['id'];
 
-    public function category()
+    public function categoryeeeeee()
     {
         return $this->belongsTo('App\Models\Category', 'category_id', 'id');
     }

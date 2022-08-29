@@ -11,7 +11,7 @@
                     <a class="nav-link" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">All Blog</a>
+                    <a class="nav-link" href="/blog/all">All Blog</a>
                 </li>
 
                 @guest
@@ -24,7 +24,7 @@
                 @else
                     @if (Auth::user()->role == 'Admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="/categories">Manage Categories</a>
+                            <a class="nav-link" href="/category">Manage Categories</a>
                         </li>
                     @endif
                     <li class="nav-item">
