@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Explore Blog')
+@section('title', 'Search Result')
 
 @section('content')
     <div class="container">
         @if ($blogs->count() == 0)
-            <div class="alert alert-warning">Blog masih kosong</div>
+            <div class="alert alert-warning">Blog tidak ditemukan</div>
         @else
-            <h3>Explore all blog</h3>
+            <h3>Hasil Pencarian</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae voluptates cupiditate veniam molestiae</p>
             <hr>
 

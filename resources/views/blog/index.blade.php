@@ -23,58 +23,70 @@
             @endif
 
             {{-- CONTENT --}}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Cover</th>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Description</th>
-                        <th>Author</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($blogs as $blog)
+            @if ($blogs->count() == 0)
+                <div class="alert alert-warning">Blog masih kosong</div>
+            @else
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <td class="fw-bold">{{ $loop->iteration }}</td>
-                            <td style="width: 20%">
-                                <img src="{{ asset('storage/images/cover/' . $blog->cover) }}" alt="{{ $blog->title }}"
-                                    class="w-100 rounded">
-                            </td>
-                            <td>
-                                <span class="d-block">{{ $blog->title }}</span>
-                                <span class="badge bg-info">{{ $blog->categoryeeeeee->title }}</span>
-                            </td>
-                            <td>{{ $blog->status }}</td>
-                            <td>{{ $blog->description }}</td>
-                            <td>{{ $blog->user->name }}</td>
-                            <td>
-                                @if (Auth::user()->role == 'Member')
-                                    <a href="{{ route('editBlog', $blog->id) }}" class="btn btn-primary btn-sm">
-                                        Edit
-                                    </a>
-                                @else
-                                    <a href="{{ route('editBlog', $blog->id) }}" class="btn btn-info btn-sm">
-                                        Accept
-                                    </a>
-                                @endif
-                                <a href="{{ route('deleteBlog', $blog->id) }}" class="btn btn-danger btn-sm"
-                                    onclick="event.preventDefault(); document.getElementById('delete-category-{{ $blog->id }}').submit()">
-                                    Delete
-                                </a>
-
-                                <form action="{{ route('deleteBlog', $blog->id) }}"
-                                    id="delete-category-{{ $blog->id }}" class="d-none" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                </form>
-                            </td>
+                            <th>#</th>
+                            <th>Cover</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Description</th>
+                            <th>Author</th>
+                            <th>Action</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($blogs as $blog)
+                            <tr>
+                                <td class="fw-bold">{{ $loop->iteration }}</td>
+                                <td style="width: 20%">
+                                    <img src="{{ asset('storage/images/cover/' . $blog->cover) }}" alt="{{ $blog->title }}"
+                                        class="w-100 rounded">
+                                </td>
+                                <td>
+                                    <span class="d-block">{{ $blog->title }}</span>
+                                    <span class="badge bg-info">{{ $blog->categoryeeeeee->title }}</span>
+                                </td>
+                                <td>{{ $blog->status }}</td>
+                                <td>{{ $blog->description }}</td>
+                                <td>{{ $blog->user->name }}</td>
+                                <td>
+                                    @if (Auth::user()->role == 'Member')
+                                        <a href="{{ route('editBlog', $blog->id) }}" class="btn btn-primary btn-sm">
+                                            Edit
+                                        </a>
+                                    @else
+                                        @if ($blog->status != 'Accepted')
+                                            <a href="#" class="btn btn-info btn-sm"
+                                                onclick="event.preventDefault(); document.getElementById('update-blog-{{ $blog->id }}').submit()">
+                                                Accept
+                                            </a>
+                                            <form action="{{ route('acceptBlog', $blog->id) }}"
+                                                id="update-blog-{{ $blog->id }}" method="POST" class="d-none">
+                                                @csrf
+                                                @method('PUT')
+                                            </form>
+                                        @endif
+                                    @endif
+                                    <a href="{{ route('deleteBlog', $blog->id) }}" class="btn btn-danger btn-sm"
+                                        onclick="event.preventDefault(); document.getElementById('delete-category-{{ $blog->id }}').submit()">
+                                        Delete
+                                    </a>
+
+                                    <form action="{{ route('deleteBlog', $blog->id) }}"
+                                        id="delete-category-{{ $blog->id }}" class="d-none" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
     </div>
 @endsection

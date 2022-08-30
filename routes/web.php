@@ -17,26 +17,33 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/blog/all', 'App\Http\Controllers\PageController@allBlog')->name('getAllBlog');
+
+Route::group(['namespace', 'App\Http\Controllers'], function () {
+    Route::get('/blog/all', 'PageController@allBlog')->name('getAllBlog');
+    
+    Route::group(['middleware' => 'RoleAdmin'], function () {
+        // CATEGORY ROUTES
+        Route::get('/category', 'CategoryController@index');
+        Route::post('/category', 'CategoryController@store')->name('storeCategory');
+        Route::get('/category/{id}', 'CategoryController@edit')->name('editCategory');
+        Route::put('/category/{id}', 'CategoryController@update')->name('updateCategory');
+        Route::delete('/category/{id}', 'CategoryController@destroy')->name('deleteCategory');
+
+        // ACCEPT BLOG
+        Route::put('/blog/accept/{id}', 'BlogController@acceptBlog')->name('acceptBlog');
+    });
 
 
-Route::group(['middleware' => 'RoleAdmin'], function () {
-    // CATEGORY ROUTES
-    Route::get('/category', 'App\Http\Controllers\CategoryController@index');
-    Route::post('/category', 'App\Http\Controllers\CategoryController@store')->name('storeCategory');
-    Route::get('/category/{id}', 'App\Http\Controllers\CategoryController@edit')->name('editCategory');
-    Route::put('/category/{id}', 'App\Http\Controllers\CategoryController@update')->name('updateCategory');
-    Route::delete('/category/{id}', 'App\Http\Controllers\CategoryController@destroy')->name('deleteCategory');
+    // BLOG ROUTES
+    Route::get('/blog', 'BlogController@index');
+    Route::post('/blog', 'BlogController@store')->name('storeBlog');
+    Route::get('/blog/{id}', 'BlogController@edit')->name('editBlog');
+    Route::put('/blog/{id}', 'BlogController@update')->name('updateBlog');
+    Route::delete('/blog/{id}', 'BlogController@destroy')->name('deleteBlog');
+
+    // SEARCH BLOG
+    Route::post('/blog/search', 'BlogController@search')->name('searchBlog');
 });
-
-
-// BLOG ROUTES
-Route::get('/blog', 'App\Http\Controllers\BlogController@index');
-Route::post('/blog', 'App\Http\Controllers\BlogController@store')->name('storeBlog');
-Route::get('/blog/{id}', 'App\Http\Controllers\BlogController@edit')->name('editBlog');
-Route::put('/blog/{id}', 'App\Http\Controllers\BlogController@update')->name('updateBlog');
-Route::delete('/blog/{id}', 'App\Http\Controllers\BlogController@destroy')->name('deleteBlog');
-
 
 Auth::routes();
 
